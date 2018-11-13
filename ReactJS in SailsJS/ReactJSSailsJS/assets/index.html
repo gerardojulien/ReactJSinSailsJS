@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8"/>
+	<title>ReactJS en SailsJS</title>
+	<link href="css/style.css" rel="stylesheet"></link>
+	<link rel="icon" href="favicon.png" type="image/png">
+	<script>
+
+		var imageBase64;
+		function readFile() {
+  
+			if (this.files && this.files[0]) {
+				
+				var FR= new FileReader();
+				
+				FR.addEventListener("load", function(e) {
+					document.getElementById("img").src       = e.target.result;
+					imageBase64 = e.target.result.split(',')[1];
+				// document.getElementById("b64").innerHTML = e.target.result.split(',')[1];
+				}); 
+				
+				FR.readAsDataURL( this.files[0] );
+			}
+		
+		}
+
+		function saveData() {
+			console.log('SaveDATA');
+			console.log(fname.value);
+			console.log(fdescription.value);
+			var toSend = {
+				CarName:fname.value,
+				CarDescription:fdescription.value,
+				CarImage:imageBase64
+			};
+			if (fname.value != null && fname.value != '' &&
+			fdescription.value != null && fdescription.value != '' &&
+			imageBase64 != null && imageBase64 != '') {
+				console.log('TO SEND');
+				$.ajax({
+					type:"POST",
+					url: 'car/send',
+					dataType: 'text',
+					data: toSend,
+					success:function(data) {  
+						console.log('data: ', data)
+						location.reload();
+					},
+				});
+			}
+		}
+
+
+	</script>
+
+
+<style>
+	body {font-family: Arial, Helvetica, sans-serif;}
+	
+	/* The Modal (background) */
+	.modal {
+		display: none; /* Hidden by default */
+		position: fixed; /* Stay in place */
+		z-index: 1; /* Sit on top */
+		padding-top: 100px; /* Location of the box */
+		left: 0;
+		top: 0;
+		width: 100%; /* Full width */
+		height: 100%; /* Full height */
+		overflow: auto; /* Enable scroll if needed */
+		background-color: rgb(0,0,0); /* Fallback color */
+		background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+	
+	/* Modal Content */
+	.modal-content {
+		background-color: #fefefe;
+		margin: auto;
+		padding: 20px;
+		border: 1px solid #888;
+		width: 80%;
+	}
+	
+	/* The Close Button */
+	.close {
+		color: #aaaaaa;
+		float: right;
+		font-size: 28px;
+		font-weight: bold;
+	}
+	
+	.close:hover,
+	.close:focus {
+		color: #000;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	</style>
+</head>
+<body>
+	<header>
+		<h2>ReactJS in SailsJS</h2>
+	</header>
+	<article>
+			<br />
+			Name: <input type="text" name="fname" id="fname" maxlength="50" size="50">
+			<br />
+			<br />
+			Specifications: <input type="text" name="fdescription" id="fdescription" maxlength="200" size="100">
+			<br />
+			<br />
+			Image: <input id="inp" type='file'>
+			<p id="b64"></p>
+			<img id="img" width="100">
+			<script>		document.getElementById("inp").addEventListener("change", readFile);</script>
+			<Button bsStyle="primary" bsSize="large" onclick="saveData()">
+				Save!
+			</Button>
+	</article>
+	<section>
+		<article id="simpleList">
+			<small>Downloading...</small>
+		</article>
+	</section>
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>
+		<table border=0>
+			<tr>
+				<td rowspan="10">
+					<img src="https://s3.us-east-2.amazonaws.com/nodechallenge/images/small/loader.gif" width="800" id="imageId" alt="Italian Trulli">
+				</td>
+				<td>
+					<b>Name:</b>
+				</td>
+				<td id="nameId">
+					
+				</td>
+			</tr>
+			<tr>
+				<td><b>Specifications:</b></td>
+				<td id="specificationsId"></td>
+			</tr>
+		</table>
+	</p>
+		
+		
+  </div>
+
+</div>
+
+<script>
+	// Get the modal
+	var modal = document.getElementById('myModal');
+	
+	// Get the <span> element that closes the modal
+	var span = document.getElementsByClassName("close")[0];
+	
+
+	// When the user clicks on <span> (x), close the modal
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+	
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+		if (event.target == modal) {
+			modal.style.display = "none";
+		}
+	}
+	</script>
+
+	
+	<footer>
+		<small>by: <strong>Gerardo Pelayo<a href="https://twitter.com/gerardjulien" target="_blank">@gerardjulien</a></strong></small>
+	</footer>
+	
+	<script src="//fb.me/react-0.13.1.js"></script>
+	<script src="//code.jquery.com/jquery-1.10.0.min.js"></script>
+	<script src="js/reactApp.js"></script>
+	<script type="text/jsx" src="js/reactImage.js"></script>
+
+</body>
+</html>
